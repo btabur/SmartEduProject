@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
+
 exports.createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
@@ -23,11 +24,16 @@ exports.loginUser = (req, res) => {
     User.findOne({ email })
       .then((response) => {
         bcrypt.compare(password, response.password)
-          .then(() => {
-            res.status(200).send("You are login");
+          .then((isTrue) => {
+            if(isTrue) {
+              req.session.userID = response._id;
+              res.status(200).redirect('/')
+            }else {
+              res.status(200).send('password is not true');
+            }
           })
-          .catch(() => {
-            res.status(200).send("Password is not true");
+          .catch((err) => {
+            res.status(200).send(err);
           });
       })
       .catch(() => {

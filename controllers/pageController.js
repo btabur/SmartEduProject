@@ -1,4 +1,7 @@
+
+
 exports.getIndexPage = (req, res) => {
+  console.log(req.session.userID)
     res.status(200).render('index', {
         page_name:'index'  // ilgili sayfaya page_name isminde bir değişken gönderiyoruz
     });
