@@ -27,7 +27,7 @@ exports.loginUser = (req, res) => {
           .then((isTrue) => {
             if(isTrue) {
               req.session.userID = response._id;
-              res.status(200).redirect('/')
+              res.status(200).redirect('/users/dashboard')
             }else {
               res.status(200).send('password is not true');
             }
@@ -52,3 +52,11 @@ exports.logoutUser = (req,res)=> {
     res.redirect('/')
   })
 }
+
+exports.getDashboardPage = async(req, res) => {
+  const user = await User.findOne({_id: req.session.userID})
+  res.status(200).render('dashboard', {
+      page_name:'dashboard',
+      user
+  });
+};
