@@ -21,11 +21,17 @@ const UserSchema = new Schema({
     type:String,
     enum: ["student","teacher","admin"],
     default:"student"
-  }
+  },courses:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Course'
+  }]
 });
 
 // kullanıcıdan alınan şifre veri tabanına kaydedilmeden önce şifreli hale getiriyoruz.
 UserSchema.pre('save', function(next) {
+  // if(!user.isModified('password')) {
+  //   return next();
+  // }
   const user = this;
   bcrypt.hash(user.password,10,(error,hash)=> {
     user.password=hash;
