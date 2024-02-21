@@ -27,17 +27,31 @@ const UserSchema = new Schema({
   }]
 });
 
-// kullanıcıdan alınan şifre veri tabanına kaydedilmeden önce şifreli hale getiriyoruz.
+// // kullanıcıdan alınan şifre veri tabanına kaydedilmeden önce şifreli hale getiriyoruz.
+// UserSchema.pre('save', function(next) {
+//   // if(!user.isModified('password')) {
+//   //   return next();
+//   // }
+//   const user = this;
+//   bcrypt.hash(user.password,10,(error,hash)=> {
+//     user.password=hash;
+//     next()
+//   })
+// })
+
 UserSchema.pre('save', function(next) {
-  // if(!user.isModified('password')) {
-  //   return next();
-  // }
   const user = this;
-  bcrypt.hash(user.password,10,(error,hash)=> {
-    user.password=hash;
-    next()
-  })
-})
+  if (!user.isModified('password')) return next();
+
+  bcrypt.genSalt(10, function(err, salt) {
+      if (err) return next(err);
+      bcrypt.hash(user.password, salt, function(err, hash) {
+          if (err) return next(err);
+          user.password = hash;
+          next();
+      });
+  });
+});
 
 const User = mongoose.model("User", UserSchema);
 

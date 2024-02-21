@@ -115,3 +115,28 @@ exports.releaseCourse = async (req, res) => {
     });
   }
 };
+
+exports.deleteCourse = async (req, res) => {
+  try {
+    //todo  kurs bulunamadı hatası veriyor düzeltilmesi lazım
+    const deletedCourse = await Course.findOneAndDelete({ slug:req.params.slug });
+
+    if (!deletedCourse) {
+      // Eğer silinen bir kurs bulunamazsa
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Kurs bulunamadı.',
+      });
+    }
+
+    // Başarılı silme durumu
+    res.redirect('/users/dashboard');
+  } catch (error) {
+    // Hata durumunda
+    console.error(error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+    });
+  }
+};

@@ -108,6 +108,13 @@ if(user) { %> <% if(user.role === 'student') { %>
                 <%=courses[i].description %>
               </p>
             </div>
+            <div class="d-flex justify-content-between ">
+                <button class="btn btn-primary  text-white"> <span>Update</span></button>
+                <a href="/courses/<%=courses[i].slug %>?_method=DELETE"
+                  onclick="return confirm('Are you sure? ')"
+                  class="btn btn-danger  text-white"> <span>Delete</span>
+                </a>
+            </div>
           </div>
         </div>
       </div>
