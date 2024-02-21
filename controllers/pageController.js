@@ -32,7 +32,9 @@ exports.getIndexPage = (req, res) => {
   };
 
   exports.sendEmail = (req, res) => {
-   const outputMessage = `
+
+    try {
+      const outputMessage = `
     <h1> Mail Details</h1>
     <ul>
       <li>Name:${req.body.name}  </li>
@@ -51,7 +53,7 @@ exports.getIndexPage = (req, res) => {
     auth: {
       // TODO: replace `user` and `pass` values from <https://forwardemail.net>
       user: "deneme@gmail.com",
-      pass: "bwwgbdgb",
+      pass: "bwwgbdgb111111",
     },
   });
   
@@ -60,7 +62,7 @@ exports.getIndexPage = (req, res) => {
     // send mail with defined transport object
     const info = await transporter.sendMail({
       from: '"Smart Edu Contact Form" <deneme@gmail.com>', // sender address
-      to: "deneme@gmail.com", // list of receivers
+      to: "btabur.0323@gmail.com", // list of receivers
       subject: " Smart Edu Contact Message", // Subject line
      
       html: outputMessage, // html body
@@ -68,7 +70,13 @@ exports.getIndexPage = (req, res) => {
   
     console.log("Message sent: %s", info.messageId);
   };
-
+  req.flash("success",'We received your message successfuly')
   res.status(200).redirect('contact')
+      
+    } catch (error) {
+      req.flash("error",`Something happened! ${error}`)
+      res.status(200).redirect('contact')
+    }
+   
 
 }
