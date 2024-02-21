@@ -24,7 +24,7 @@
 								<%= flashMessage.success %>
 							</div>
 	
-							<% } else { %>
+							<% } else if(flashMessage.error) { %>
 								<div class=" alert alert-danger ">
 									<%= flashMessage.error %>
 								</div>
