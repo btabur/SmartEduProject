@@ -118,7 +118,7 @@ exports.releaseCourse = async (req, res) => {
 
 exports.deleteCourse = async (req, res) => {
   try {
-    //todo  kurs bulunamadı hatası veriyor düzeltilmesi lazım
+ 
     const deletedCourse = await Course.findOneAndDelete({ slug:req.params.slug });
 
     if (!deletedCourse) {
@@ -129,6 +129,28 @@ exports.deleteCourse = async (req, res) => {
       });
     }
 
+    // Başarılı silme durumu
+    res.redirect('/users/dashboard');
+  } catch (error) {
+    // Hata durumunda
+    console.error(error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+    });
+  }
+};
+
+
+exports.updateCourse = async (req, res) => {
+  try {
+ 
+    const course =await Course.findOne({slug:req.params.slug});
+    course.name = req.body.name;
+    course.description = req.body.description;
+    course.category = req.body.category;
+
+    course.save();
     // Başarılı silme durumu
     res.redirect('/users/dashboard');
   } catch (error) {
