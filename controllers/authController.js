@@ -64,13 +64,37 @@ exports.logoutUser = (req,res)=> {
 exports.getDashboardPage = async(req, res) => {
   const user = await User.findOne({_id: req.session.userID}).populate('courses');  //bu kullanıcının kayıtlı olduğu kursları da içerisine ekler
   const categories = await Category.find();
-  const courses = await Course.find({user:req.session.userID})
+  const courses = await Course.find({user:req.session.userID});
+  const users = await User.find();
 
   res.status(200).render('dashboard', {
       page_name:'dashboard',
       user,
       categories,
-      courses
+      courses,
+      users
 
   });
+};
+
+
+exports.deleteUser = async (req, res) => {
+  try {
+ 
+  await User.findByIdAndDelete(req.params.id);
+  //o kullanıcıya ait bulunan kursları da siler
+  await Course.deleteMany({user:req.params.id})
+
+   
+
+    // Başarılı silme durumu
+    res.redirect('/users/dashboard');
+  } catch (error) {
+    // Hata durumunda
+    console.error(error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+    });
+  }
 };

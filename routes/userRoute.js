@@ -30,6 +30,7 @@ router.route("/logout").get(authController.logoutUser);
 // izinsiz girişleri engellemek için özel bir middleware yazdık 
 // dashboard sayfasına gitmeden önce authMiddleware ile izninin olup olmadığı kontrol edilir
 router.route("/dashboard").get(authMiddleware,authController.getDashboardPage); 
+router.route('/:id').delete(authController.deleteUser)
 
 
 module.exports = router;
